@@ -168,12 +168,18 @@ end_date = st.selectbox('End Date', month_years, index=len(month_years) - 1)
 # Filter data based on selection
 filtered_data = spotify[(spotify['month_years'] >= start_date) & (spotify['month_years'] <= end_date)]
 
+# Create an interactive selection
+selection = alt.selection_multi(fields=['track_name'], bind='legend')
+
 # Scatter plot
 scatter_base = alt.Chart(filtered_data).properties(width=800, height=300)
 scatter = scatter_base.mark_point().encode(
     x='release_date:T',
     y='streams:Q',
+    color=alt.condition(selection, alt.value('blue'), alt.value('lightgray')),
     tooltip=['track_name:N', 'artist(s)_name:N', 'streams:Q', 'release_date:T', 'bpm:Q']
+).add_selection(
+    selection
 )
 
 # Bar plot for musical characteristics
@@ -185,6 +191,8 @@ bars = bar_base.mark_bar().encode(
                     scale=alt.Scale(domain=['Danceability', 'Valence', 'Energy'],
                                     range=['#e94f13', '#989681', '#e69138'])),
     tooltip=['Percentage:Q']
+).transform_filter(
+    selection
 ).transform_aggregate(
     Danceability='mean(danceability_%)',
     Valence='mean(valence_%)',
@@ -200,4 +208,3 @@ chart = alt.vconcat(scatter, bars)
 
 # Display the concatenated chart
 st.altair_chart(chart, use_container_width=True)
-
