@@ -11,9 +11,13 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+st.header("H3: Most Streamed Spotify Songs 2023", divider="rainbow")
+st.subheader("What is H3")
 
 # Enable dark theme for Altair
 alt.themes.enable("dark")
+
+st.markdown("Team Members: Luanqi CHEN, Mingjing HE, Josué LABRIN, Vennela SEELAM") 
 
 # Load Spotify data
 spotify = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
