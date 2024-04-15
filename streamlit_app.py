@@ -48,13 +48,12 @@ end_date = pd.to_datetime(end_date)
 def display_top_songs_bar_plot(data, top_n):
     data['streams'] = pd.to_numeric(data['streams'], errors='coerce')
     top_songs = data[(data['release_date'] >= start_date) & (data['release_date'] <= end_date)].nlargest(top_n, 'streams')
-    
     fig_bar = px.bar(top_songs, x='track_name', y='streams', title='Top Songs Based on Number of Streams')
     st.plotly_chart(fig_bar)
 
 # Sidebar options for selecting number of top songs
 top_n_options = [10, 20, 50, 100]
-selected_top_n = st.sidebar.selectbox("Select number of top songs to display:", top_n_options)
+selected_top_n = st.selectbox("Select number of top songs to display:", top_n_options)
 
 # Display the top songs bar plot
 display_top_songs_bar_plot(spotify, selected_top_n)
