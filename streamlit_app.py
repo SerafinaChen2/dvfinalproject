@@ -106,7 +106,7 @@ def create_top_artists_bar_plot(data, top_n):
 
 # Sidebar options for selecting number of top artists to display
 top_n_options_artists = [3, 5, 10]
-selected_top_n_artists = st.sidebar.selectbox("Select number of top artists to display:", top_n_options_artists)
+selected_top_n_artists = st.selectbox("Select number of top artists to display:", top_n_options_artists)
 
 # Create and display the top artists bar plot
 st.write("### Top Artists Based on Number of Streams")
@@ -141,7 +141,7 @@ def create_tracks_evolution_plot(data, time_unit):
 
 # Sidebar options for selecting time unit (Month or Year)
 time_unit_options = ['Month', 'Year']
-selected_time_unit = st.sidebar.selectbox("Select time unit:", time_unit_options)
+selected_time_unit = st.selectbox("Select time unit:", time_unit_options)
 
 # Create and display the tracks evolution plot
 st.write("### Evolution of Number of Tracks Over Time")
