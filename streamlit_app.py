@@ -37,7 +37,7 @@ st.subheader("Top tracks plot and Radar plot with Attributes")
 st.sidebar.title("Filter Options")
 
 # Create dropdown widgets for start_date and end_date
-start_date = st.sidebar.("Start Date", spotify['release_date'].min())
+start_date = st.sidebar("Start Date", spotify['release_date'].min())
 end_date = st.sidebar("End Date", spotify['release_date'].max())
 
 
