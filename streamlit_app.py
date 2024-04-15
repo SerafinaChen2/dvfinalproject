@@ -119,21 +119,23 @@ st.altair_chart(create_top_artists_bar_plot(filtered_data, selected_top_n_artist
 # ------ Visualisation 3 ---------
 st.subheader("Historical Trend of number of tracks")
 
-# Function to create evolution plot of number of tracks over time
 def create_tracks_evolution_plot(data, time_unit):
-    # Group the data by release date and count the number of tracks
+    # Convert release_date to string for grouping
+    data['release_date_str'] = data['release_date'].dt.strftime('%Y-%m')  # Format as year-month string
+
+    # Group the data by release date string and count the number of tracks
     if time_unit == 'Year':
-        tracks_evolution = data.groupby(data['release_date'].dt.year)['track_name'].count().reset_index()
+        tracks_evolution = data.groupby(data['release_date_str'].str[:4])['track_name'].nunique().reset_index()
         x_axis_title = 'Year'
     elif time_unit == 'Month':
-        tracks_evolution = data.groupby(data['release_date'].dt.to_period('M'))['track_name'].count().reset_index()
+        tracks_evolution = data.groupby(data['release_date_str'])['track_name'].nunique().reset_index()
         x_axis_title = 'Month'
 
     # Create the line plot
     chart = alt.Chart(tracks_evolution).mark_line().encode(
-        x=alt.X('release_date:T', title=x_axis_title),
+        x=alt.X('release_date_str:O', title=x_axis_title),
         y=alt.Y('track_name:Q', title='Number of Tracks'),
-        tooltip=['release_date:T', 'track_name:Q']
+        tooltip=['release_date_str:O', 'track_name:Q']
     ).properties(
         width=800,
         height=400
