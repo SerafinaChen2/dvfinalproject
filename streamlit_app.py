@@ -2,14 +2,20 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
-# Load your data
-@st.cache
-def load_data():
-    spotify = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
-    spotify['release_date'] = pd.to_datetime(spotify['released_year'].astype(str) + '-' + spotify['released_month'].astype(str).zfill(2))
-    return spotify
+# Set page configuration
+st.set_page_config(
+    page_title="Spotify Mania",
+    page_icon="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-spotify = load_data()
+# Enable dark theme for Altair
+alt.themes.enable("dark")
+
+# Load Spotify data
+spotify = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
+spotify['release_date'] = pd.to_datetime(spotify['released_year'].astype(str) + '-' + spotify['released_month'].astype(str).str.zfill(2))
 
 # Unique month-year values
 month_years = sorted(spotify['month_year'].unique())
