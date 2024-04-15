@@ -168,8 +168,8 @@ end_date = st.selectbox('End Date', month_years, index=len(month_years) - 1)
 # Filter data based on selection
 filtered_data = spotify[(spotify['month_years'] >= start_date) & (spotify['month_years'] <= end_date)]
 
-# Create an interactive selection
-selection = alt.selection_multi(fields=['track_name'], bind='legend')
+# Create an interval selection to select points within a rectangular area
+selection = alt.selection_interval(encodings=['x', 'y'])
 
 # Scatter plot
 scatter_base = alt.Chart(filtered_data).properties(width=800, height=300)
@@ -177,7 +177,7 @@ scatter = scatter_base.mark_point().encode(
     x='release_date:T',
     y='streams:Q',
     color=alt.condition(selection, alt.value('blue'), alt.value('lightgray')),
-    tooltip=['track_name:N', 'artist(s)_name:N', 'streams:Q', 'release_date:T', 'bpm:Q']
+    tooltip=['track_name:N', 'artist(s)_name:N', 'streams:Q', 'release_date:T']
 ).add_selection(
     selection
 )
