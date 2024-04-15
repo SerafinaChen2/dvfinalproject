@@ -44,12 +44,10 @@ end_date = st.sidebar.date_input("End Date", spotify['release_date'].max())
 start_date = pd.to_datetime(start_date)
 end_date = pd.to_datetime(end_date)
 
-# Function to create and display top songs bar plot
-def display_top_songs_bar_plot(data, top_n):
+# Function to filter and retrieve top songs
+def get_top_songs(data, top_n):
     data['streams'] = pd.to_numeric(data['streams'], errors='coerce')
-    top_songs = data[(data['release_date'] >= start_date) & (data['release_date'] <= end_date)].nlargest(top_n, 'streams')
-    fig_bar = px.bar(top_songs, x='track_name', y='streams', title='Top Songs Based on Number of Streams')
-    return fig_bar
+    return data[(data['release_date'] >= start_date) & (data['release_date'] <= end_date)].nlargest(top_n, 'streams')
 
 # Sidebar options for selecting number of top songs
 top_n_options = [10, 20, 50, 100]
@@ -57,6 +55,11 @@ selected_top_n = st.selectbox("Select number of top songs to display:", top_n_op
 
 # Retrieve the top songs based on user selection
 top_songs_data = get_top_songs(spotify, selected_top_n)
+
+# Function to create and display top songs bar plot
+def display_top_songs_bar_plot(top_songs):
+    fig_bar = px.bar(top_songs, x='track_name', y='streams', title='Top Songs Based on Number of Streams')
+    return fig_bar
 
 # Calculate mean audio features for selected top tracks
 mean_audio_features = top_songs_data[['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']].mean().tolist()
@@ -68,7 +71,7 @@ fig_radar.update_traces(fill='toself')
 # Display the bar plot and radar chart side by side
 col1, col2 = st.columns(2)
 with col1:
-    st.plotly_chart(display_top_songs_bar_plot(spotify, selected_top_n))
+    st.plotly_chart(display_top_songs_bar_plot(top_songs_data))
 with col2:
     st.plotly_chart(fig_radar)
 
