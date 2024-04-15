@@ -72,3 +72,38 @@ filtered_data = spotify[(spotify['release_date'] >= start_date) & (spotify['rele
 # Display the filtered data
 st.write("### Displaying data for the selected date range:")
 st.write(filtered_data)
+
+# Function to create top artists bar plot
+def create_top_artists_bar_plot(data, top_n):
+    # Group the data by artist and sum the streams
+    artist_streams = data.groupby('artist(s)_name')['streams'].sum().reset_index()
+
+    # Sort the data by total streams and select top N artists
+    top_artists = artist_streams.nlargest(top_n, 'streams')
+
+    # Create the bar plot
+    chart = alt.Chart(top_artists).mark_bar().encode(
+        x='streams:Q',
+        y=alt.Y('artist(s)_name:N', sort='-x'),
+        color=alt.Color('streams:Q', scale=alt.Scale(scheme='viridis'), legend=None),
+        tooltip=['artist(s)_name', 'streams']
+    ).properties(
+        width=600,
+        height=400
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_title(
+        fontSize=16
+    )
+
+    return chart
+
+# Sidebar options for selecting number of top artists to display
+top_n_options_artists = [3, 5, 10]
+selected_top_n_artists = st.sidebar.selectbox("Select number of top artists to display:", top_n_options_artists)
+
+# Create and display the top artists bar plot
+st.write("### Top Artists Based on Number of Streams")
+st.altair_chart(create_top_artists_bar_plot(spotify, selected_top_n_artists), use_container_width=True)
+
