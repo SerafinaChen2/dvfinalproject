@@ -49,18 +49,16 @@ def display_top_songs_bar_plot(data, top_n):
     data['streams'] = pd.to_numeric(data['streams'], errors='coerce')
     top_songs = data[(data['release_date'] >= start_date) & (data['release_date'] <= end_date)].nlargest(top_n, 'streams')
     fig_bar = px.bar(top_songs, x='track_name', y='streams', title='Top Songs Based on Number of Streams')
-    st.plotly_chart(fig_bar)
+    return fig_bar
 
 # Sidebar options for selecting number of top songs
 top_n_options = [10, 20, 50, 100]
-selected_top_n = st.selectbox("Select number of top songs to display:", top_n_options)
+selected_top_n = st.sidebar.selectbox("Select number of top songs to display:", top_n_options)
 
 # Calculate mean audio features for selected top tracks
 mean_audio_features = spotify[['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']].mean().tolist()
 attributes = ['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']
 mean_audio_df = pd.DataFrame({'attribute': attributes, 'mean_value': mean_audio_features})
-
-# Create and display the radar chart
 fig_radar = px.line_polar(mean_audio_df, r='mean_value', theta='attribute', line_close=True, title = 'Radar Plot of Mean Audio Features')
 fig_radar.update_traces(fill='toself')
 
