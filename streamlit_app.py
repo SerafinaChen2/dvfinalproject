@@ -76,16 +76,10 @@ with col2:
     st.plotly_chart(fig_radar)
 
 # ------ Visualisation 2 ---------
-# Sidebar for filtering options
-st.sidebar.title("Filter Options")
+st.subheader("Top Artist Plot by number of streams")
 
-# Create dropdown widgets for start_date and end_date
-start_date = st.sidebar.date_input("Start Date", spotify['release_date'].min())
-end_date = st.sidebar.date_input("End Date", spotify['release_date'].max())
-
-# Convert start_date and end_date to datetime for filtering
-start_date = pd.to_datetime(start_date)
-end_date = pd.to_datetime(end_date)
+# Create a column 'year_month' to facilitate filtering
+spotify['year_month'] = spotify['release_date'].dt.strftime('%Y-%m')
 
 # Filter the data based on the selected date range
 filtered_data = spotify[(spotify['release_date'] >= start_date) & (spotify['release_date'] <= end_date)]
@@ -117,11 +111,11 @@ def create_top_artists_bar_plot(data, top_n):
 
 # Sidebar options for selecting number of top artists to display
 top_n_options_artists = [3, 5, 10]
-selected_top_n_artists = st.sidebar.selectbox("Select number of top artists to display:", top_n_options_artists)
+selected_top_n_artists = st.selectbox("Select number of top artists to display:", top_n_options_artists)
 
 # Create and display the top artists bar plot
-st.write("### Top Artists Based on Number of Streams")
 st.altair_chart(create_top_artists_bar_plot(filtered_data, selected_top_n_artists), use_container_width=True)
+
 # ------ Visualisation 3 ---------
 st.subheader("Historical Trend of number of tracks")
 
