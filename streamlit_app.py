@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from matplotlib import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 from math import pi
 
 # Set page configuration
