@@ -64,10 +64,10 @@ attributes = ['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'inst
 mean_audio_df = pd.DataFrame({'attribute': attributes, 'mean_value': mean_audio_features})
 
 # Create and display the radar chart
-fig_radar = px.line_polar(mean_audio_df, r='mean_value', theta='attribute', line_close=True)
+fig_radar = px.line_polar(mean_audio_df, r='mean_value', theta='attribute', line_close=True, title = 'Radar Plot of Mean Audio Features')
 fig_radar.update_traces(fill='toself')
-st.write("### Radar Plot of Mean Audio Features")
 st.plotly_chart(fig_radar)
+
 # Create a column 'year_month' to facilitate filtering
 spotify['year_month'] = spotify['release_date'].dt.strftime('%Y-%m')
 
