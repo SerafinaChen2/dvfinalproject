@@ -28,6 +28,39 @@ end_date = st.sidebar.date_input("End Date", spotify['release_date'].max())
 start_date = pd.to_datetime(start_date)
 end_date = pd.to_datetime(end_date)
 
+# Function to create top songs bar plot
+def create_top_songs_bar_plot(data, top_n):
+    # Convert 'streams' column to numeric dtype
+    data['streams'] = pd.to_numeric(data['streams'], errors='coerce')
+
+    # Sort the data by number of streams and select top N songs
+    top_songs = data.nlargest(top_n, 'streams')
+
+    # Create the bar plot
+    return top_songs
+
+# Sidebar options for selecting number of top songs
+top_n_options = [10, 20, 50, 100]
+selected_top_n = st.sidebar.selectbox("Select number of top songs to display:", top_n_options)
+
+# Create and display the top songs bar plot
+st.write("### Top Songs Based on Number of Streams")
+top_songs_data = create_top_songs_bar_plot(spotify, selected_top_n)
+st.write(top_songs_data)
+
+# Calculate mean audio features for selected top tracks
+mean_audio_features = top_songs_data[['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']].mean().tolist()
+attributes = ['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']
+mean_audio_df = pd.DataFrame({'attribute': attributes, 'mean_value': mean_audio_features})
+
+# Create the radar chart
+fig = px.line_polar(mean_audio_df, r='mean_value', theta='attribute', line_close=True)
+fig.update_traces(fill='toself')
+
+# Display the radar chart
+st.write("### Radar Plot of Mean Audio Features")
+st.plotly_chart(fig)
+
 # Create a column 'year_month' to facilitate filtering
 spotify['year_month'] = spotify['release_date'].dt.strftime('%Y-%m')
 
