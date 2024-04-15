@@ -1,12 +1,11 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-from vega_datasets import data
 
 # Load your data
 @st.cache
 def load_data():
-    spotify = pd.read_csv('path_to_your_spotify-2023.csv', encoding='ISO-8859-1')
+    spotify = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
     spotify['release_date'] = pd.to_datetime(spotify['released_year'].astype(str) + '-' + spotify['released_month'].astype(str).zfill(2))
     return spotify
 
