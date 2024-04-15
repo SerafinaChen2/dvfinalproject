@@ -185,7 +185,7 @@ scatter = scatter_base.mark_point().encode(
 # Bar plot for musical characteristics
 bar_base = alt.Chart(filtered_data).properties(width=800, height=100)
 bars = bar_base.mark_bar().encode(
-    x=alt.X('Percentage:Q', title='Average Percentage'),
+    x=alt.X('percentage:Q', scale=alt.Scale(domain=[0, 100]), title='Average Percentage'),
     y=alt.Y('Musical Characteristic:N', title='Musical Characteristics'),
     color=alt.Color('Musical Characteristic:N',
                     scale=alt.Scale(domain=['Danceability', 'Valence', 'Energy'],
