@@ -94,8 +94,8 @@ def create_top_artists_bar_plot(data, top_n):
 
     # Create the bar plot
     chart = alt.Chart(top_artists).mark_bar().encode(
-        y='streams:Q',
-        x=alt.Y('artist(s) name', sort='-x'),
+        x='streams:Q',
+        y=alt.Y('artist(s) name:N', sort='-x'),
         color=alt.Color('streams:Q', scale=alt.Scale(scheme='viridis'), legend=None),
         tooltip=['artist(s)_name', 'streams']
     ).properties(
