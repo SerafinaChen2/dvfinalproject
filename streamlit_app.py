@@ -151,7 +151,7 @@ start_date = st.selectbox('Start Date', month_years, index=0)
 end_date = st.selectbox('End Date', month_years, index=len(month_years) - 1)
 
 # Filter data based on selection
-filtered_data = spotify[(spotify['month_year'] >= start_date) & (spotify['month_year'] <= end_date)]
+filtered_data = spotify[(spotify['month_years'] >= start_date) & (spotify['month_years'] <= end_date)]
 
 # Scatter plot
 scatter_base = alt.Chart(filtered_data).properties(width=800, height=300)
