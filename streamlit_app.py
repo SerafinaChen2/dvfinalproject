@@ -12,12 +12,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 st.header("Most Streamed Spotify Songs 2023", divider="rainbow")
-st.markdown("Team Members: Luanqi CHEN, Mingjing HE, Josué LABRIN, Vennela SEELAM") 
+
+col1, col2 = st.columns([0.7, 0.3])
+with col1:
+    st.markdown("Team Members: Luanqi CHEN, Mingjing HE, Josué LABRIN, Vennela SEELAM") 
+with col2:
+    st.image('https://blog.cloudflare.com/content/images/2017/10/Spotify_Logo_RGB_Green-1.png', 
+         width=180)
+    
 st.subheader("Overview of the project")
 st.markdown("This project conducts an analysis of the top songs of 2023 on Spotify,"
-            "using a dataset that includes track names, artist information, release dates, Spotify playlist and chart appearances, streaming statistics, and presence on other platforms like Apple Music, Deezer, and Shazam."
-            "It explores the success factors of songs and artists in the modern, "
-            "streaming-dominated music industry, providing insights that are crucial for artists and producers.")
+            " using a dataset that includes track names, artist information, release dates, Spotify playlist and chart appearances, streaming statistics, and presence on other platforms like Apple Music, Deezer, and Shazam."
+            " It explores the success factors of songs and artists in the modern, "
+            " streaming-dominated music industry, providing insights that are crucial for artists and producers.")
 
 # Enable dark theme for Altair
 alt.themes.enable("dark")
