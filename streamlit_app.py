@@ -154,6 +154,7 @@ selected_time_unit = st.selectbox("Select time unit:", time_unit_options)
 st.write("### Evolution of Number of Tracks Over Time")
 st.altair_chart(create_tracks_evolution_plot(spotify, selected_time_unit), use_container_width=True)
 
+# ------ Visualisation 4 ---------
 # Unique month-year values
 spotify['month_years'] = spotify['release_date'].dt.strftime('%Y-%m')
 month_years = sorted(spotify['month_years'].unique())
