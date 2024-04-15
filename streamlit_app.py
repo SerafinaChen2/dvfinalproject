@@ -157,6 +157,8 @@ st.write("### Evolution of Number of Tracks Over Time")
 st.altair_chart(create_tracks_evolution_plot(spotify, selected_time_unit), use_container_width=True)
 
 # ------ Visualisation 4 ---------
+st.subheader("Average Musical Characteristics of Trending Tracks Over Time")
+
 # Unique month-year values
 spotify['month_years'] = spotify['release_date'].dt.strftime('%Y-%m')
 month_years = sorted(spotify['month_years'].unique())
