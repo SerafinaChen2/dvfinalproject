@@ -142,30 +142,26 @@ selected_time_unit = st.sidebar.selectbox("Select time unit:", time_unit_options
 st.write("### Evolution of Number of Tracks Over Time")
 st.altair_chart(create_tracks_evolution_plot(spotify, selected_time_unit), use_container_width=True)
 
-
+# Unique month-year values
 month_years = sorted(spotify['month_year'].unique())
-start_slider = alt.binding_select(options=month_years, name='Start Date')
-start_selection = alt.selection_single(fields=['month_year'], bind=start_slider, init={'month_year': month_years[0]})
-end_slider = alt.binding_select(options=month_years, name='End Date')
-end_selection = alt.selection_single(fields=['month_year'], bind=end_slider, init={'month_year': month_years[-1]})
-scatter_base = alt.Chart(spotify).properties(width=800, height=300)
-#brush = alt.selection_interval(encodings=['x'])
-date_selection = alt.selection_interval()
+
+# Streamlit selectors for start and end dates
+start_date = st.selectbox('Start Date', month_years, index=0)
+end_date = st.selectbox('End Date', month_years, index=len(month_years) - 1)
+
+# Filter data based on selection
+filtered_data = spotify[(spotify['month_year'] >= start_date) & (spotify['month_year'] <= end_date)]
+
+# Scatter plot
+scatter_base = alt.Chart(filtered_data).properties(width=800, height=300)
 scatter = scatter_base.mark_point().encode(
     x='release_date:T',
     y='streams:Q',
     tooltip=['track_name:N', 'artist(s)_name:N', 'streams:Q', 'release_date:T', 'bpm:Q']
-).add_selection(
-    start_selection,
-    end_selection,
-    date_selection
-).transform_filter(
-    (alt.datum.month_year >= start_selection.month_year) & (alt.datum.month_year <= end_selection.month_year)
-).add_selection(
-    date_selection
 )
 
-bar_base = alt.Chart(spotify).properties(width=800, height=100)
+# Bar plot for musical characteristics
+bar_base = alt.Chart(filtered_data).properties(width=800, height=100)
 bars = bar_base.mark_bar().encode(
     x=alt.X('Percentage:Q', title='Average Percentage'),
     y=alt.Y('Musical Characteristic:N', title='Musical Characteristics'),
@@ -173,8 +169,6 @@ bars = bar_base.mark_bar().encode(
                     scale=alt.Scale(domain=['Danceability', 'Valence', 'Energy'],
                                     range=['#e94f13', '#989681', '#e69138'])),
     tooltip=['Percentage:Q']
-).transform_filter(
-    date_selection
 ).transform_aggregate(
     Danceability='mean(danceability_%)',
     Valence='mean(valence_%)',
@@ -184,4 +178,10 @@ bars = bar_base.mark_bar().encode(
     ['Danceability', 'Valence', 'Energy'],
     as_=['Musical Characteristic', 'Percentage']
 )
-alt.vconcat(scatter, bars)
+
+# Concatenate the scatter and bar plots vertically
+chart = alt.vconcat(scatter, bars)
+
+# Display the concatenated chart
+st.altair_chart(chart, use_container_width=True)
+
