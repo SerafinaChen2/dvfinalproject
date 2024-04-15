@@ -26,12 +26,12 @@ st.markdown("This project conducts an analysis of the top songs of 2023 on Spoti
             " It explores the success factors of songs and artists in the modern, "
             " streaming-dominated music industry, providing insights that are crucial for artists and producers.")
 
-# Enable dark theme for Altair
-alt.themes.enable("dark")
-
 # Load Spotify data
 spotify = pd.read_csv('spotify-2023.csv', encoding='ISO-8859-1')
 spotify['release_date'] = pd.to_datetime(spotify['released_year'].astype(str) + '-' + spotify['released_month'].astype(str).str.zfill(2))
+
+# ------ Visualisation 1 ---------
+st.subheader("Top tracks plot and Radar plot with Attributes")
 
 # Sidebar for filtering options
 st.sidebar.title("Filter Options")
@@ -60,9 +60,9 @@ top_n_options = [10, 20, 50, 100]
 selected_top_n = st.sidebar.selectbox("Select number of top songs to display:", top_n_options)
 
 # Create and display the top songs bar plot
-st.write("### Top Songs Based on Number of Streams")
-top_songs_data = create_top_songs_bar_plot(spotify, selected_top_n)
-st.write(top_songs_data)
+# st.write("### Top Songs Based on Number of Streams")
+# top_songs_data = create_top_songs_bar_plot(spotify, selected_top_n)
+# st.write(top_songs_data)
 
 # Calculate mean audio features for selected top tracks
 mean_audio_features = top_songs_data[['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']].mean().tolist()
