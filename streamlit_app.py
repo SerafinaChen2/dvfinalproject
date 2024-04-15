@@ -107,3 +107,38 @@ selected_top_n_artists = st.sidebar.selectbox("Select number of top artists to d
 st.write("### Top Artists Based on Number of Streams")
 st.altair_chart(create_top_artists_bar_plot(spotify, selected_top_n_artists), use_container_width=True)
 
+# Function to create evolution plot of number of tracks over time
+def create_tracks_evolution_plot(data, time_unit):
+    # Group the data by release date and count the number of tracks
+    if time_unit == 'Year':
+        tracks_evolution = data.groupby(data['release_date'].dt.year)['track_name'].count().reset_index()
+        x_axis_title = 'Year'
+    elif time_unit == 'Month':
+        tracks_evolution = data.groupby(data['release_date'].dt.to_period('M'))['track_name'].count().reset_index()
+        x_axis_title = 'Month'
+
+    # Create the line plot
+    chart = alt.Chart(tracks_evolution).mark_line().encode(
+        x=alt.X('release_date:T', title=x_axis_title),
+        y=alt.Y('track_name:Q', title='Number of Tracks'),
+        tooltip=['release_date:T', 'track_name:Q']
+    ).properties(
+        width=800,
+        height=400
+    ).configure_axis(
+        labelFontSize=12,
+        titleFontSize=14
+    ).configure_title(
+        fontSize=16
+    )
+
+    return chart
+
+# Sidebar options for selecting time unit (Month or Year)
+time_unit_options = ['Month', 'Year']
+selected_time_unit = st.sidebar.selectbox("Select time unit:", time_unit_options)
+
+# Create and display the tracks evolution plot
+st.write("### Evolution of Number of Tracks Over Time")
+st.altair_chart(create_tracks_evolution_plot(spotify, selected_time_unit), use_container_width=True)
+
