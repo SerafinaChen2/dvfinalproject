@@ -60,9 +60,9 @@ top_n_options = [10, 20, 50, 100]
 selected_top_n = st.sidebar.selectbox("Select number of top songs to display:", top_n_options)
 
 # Create and display the top songs bar plot
-# st.write("### Top Songs Based on Number of Streams")
- top_songs_data = create_top_songs_bar_plot(spotify, selected_top_n)
-# st.write(top_songs_data)
+st.write("### Top Songs Based on Number of Streams")
+top_songs_data = create_top_songs_bar_plot(spotify, selected_top_n)
+st.write(top_songs_data)
 
 # Calculate mean audio features for selected top tracks
 mean_audio_features = top_songs_data[['danceability_%', 'valence_%', 'energy_%', 'acousticness_%', 'instrumentalness_%', 'liveness_%', 'speechiness_%']].mean().tolist()
