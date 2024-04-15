@@ -143,7 +143,8 @@ st.write("### Evolution of Number of Tracks Over Time")
 st.altair_chart(create_tracks_evolution_plot(spotify, selected_time_unit), use_container_width=True)
 
 # Unique month-year values
-month_years = sorted(spotify['month_year'].unique())
+spotify['month_years'] = spotify['release_date'].dt.strftime('%Y-%m')
+month_years = sorted(spotify['month_years'].unique())
 
 # Streamlit selectors for start and end dates
 start_date = st.selectbox('Start Date', month_years, index=0)
